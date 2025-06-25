@@ -1,0 +1,791 @@
+/* Import base auth styles */
+@import '../signin/signin.component.css';
+
+/* Override demo section for signup (not applicable) */
+.demo-section {
+  display: none;
+}
+
+/* Role Selection Styles */
+.role-selection {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.role-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: var(--card);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  min-height: 60px;
+}
+
+.role-btn:hover {
+  border-color: var(--primary);
+  background: var(--muted);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.role-btn.active {
+  border-color: var(--primary);
+  background: var(--primary);
+  color: var(--primary-foreground);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.role-btn svg {
+  flex-shrink: 0;
+  color: var(--muted-foreground);
+  width: 20px;
+  height: 20px;
+}
+
+.role-btn.active svg {
+  color: var(--primary-foreground);
+}
+
+.role-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.role-title {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--foreground);
+}
+
+.role-btn.active .role-title {
+  color: var(--primary-foreground);
+}
+
+.role-subtitle {
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+}
+
+.role-btn.active .role-subtitle {
+  color: var(--primary-foreground);
+  opacity: 0.9;
+}
+
+/* Name Row */
+.name-row {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+}
+
+.name-row .form-group {
+  flex: 1;
+  min-width: 0;
+  /* Prevents flex items from overflowing */
+}
+
+.name-row .input-group {
+  width: 100%;
+}
+
+.name-input {
+  padding: 0.75rem !important;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Company Fields */
+.company-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: var(--muted/50);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin: 0.75rem 0;
+}
+
+.company-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.company-row .form-group {
+  flex: 1;
+}
+
+.form-select {
+  width: 100%;
+  padding: 0.625rem 0.875rem;
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--foreground);
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.75rem center;
+  background-repeat: no-repeat;
+  background-size: 1rem;
+  padding-right: 2.25rem;
+}
+
+.form-select:focus {
+  outline: none;
+  border-color: var(--ring);
+  box-shadow: 0 0 0 2px var(--ring/20);
+}
+
+.form-select.error {
+  border-color: var(--destructive);
+  box-shadow: 0 0 0 1px var(--destructive);
+}
+
+.form-textarea {
+  width: 100%;
+  padding: 0.625rem 0.875rem;
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--foreground);
+  font-size: 0.875rem;
+  font-family: inherit;
+  transition: all 0.2s ease;
+  resize: vertical;
+  min-height: 70px;
+}
+
+.form-textarea:focus {
+  outline: none;
+  border-color: var(--ring);
+  box-shadow: 0 0 0 2px var(--ring/20);
+}
+
+.form-textarea.error {
+  border-color: var(--destructive);
+  box-shadow: 0 0 0 1px var(--destructive);
+}
+
+/* Terms Agreement */
+.checkbox-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  cursor: pointer;
+  line-height: 1.5;
+}
+
+.checkbox-label.error .checkbox-text {
+  color: var(--destructive);
+}
+
+.checkbox-text {
+  color: var(--foreground);
+  font-size: 0.875rem;
+}
+
+.terms-link {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.terms-link:hover {
+  color: var(--primary);
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+/* Enhanced Responsive Design */
+
+/* Extra large screens (1440px+) */
+@media (min-width: 1440px) {
+  .auth-card {
+    max-width: 560px;
+    padding: 2.5rem;
+  }
+
+  .role-selection {
+    gap: 1.5rem;
+  }
+
+  .role-btn {
+    padding: 1.5rem;
+    min-height: 75px;
+  }
+
+  .role-btn svg {
+    width: 26px;
+    height: 26px;
+  }
+
+  .role-title {
+    font-size: 1rem;
+  }
+
+  .role-subtitle {
+    font-size: 0.875rem;
+  }
+
+  .company-fields {
+    padding: 1.75rem;
+    margin: 1.25rem 0;
+  }
+
+  .name-row {
+    gap: 1.5rem;
+  }
+
+  .company-row {
+    gap: 1.5rem;
+  }
+}
+
+/* Large screens (1200px+) */
+@media (min-width: 1200px) {
+  .auth-card {
+    max-width: 520px;
+    padding: 2rem;
+  }
+
+  .role-selection {
+    gap: 1.25rem;
+  }
+
+  .role-btn {
+    padding: 1.25rem;
+    min-height: 70px;
+  }
+
+  .role-btn svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .role-title {
+    font-size: 0.9375rem;
+  }
+
+  .role-subtitle {
+    font-size: 0.8125rem;
+  }
+
+  .company-fields {
+    padding: 1.5rem;
+    margin: 1rem 0;
+  }
+
+  .name-row {
+    gap: 1.25rem;
+  }
+
+  .company-row {
+    gap: 1.25rem;
+  }
+}
+
+/* Medium screens (768px - 1199px) */
+@media (min-width: 768px) and (max-width: 1199px) {
+  .auth-card {
+    max-width: 500px;
+    padding: 1.75rem;
+  }
+
+  .role-selection {
+    gap: 1rem;
+  }
+
+  .role-btn {
+    padding: 1rem;
+    min-height: 65px;
+  }
+
+  .role-btn svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .company-fields {
+    padding: 1.25rem;
+    margin: 1rem 0;
+  }
+}
+
+/* Very small screens (400px - 639px) */
+@media (min-width: 400px) and (max-width: 639px) {
+  .name-row {
+    gap: 0.5rem;
+  }
+
+  .name-input {
+    font-size: 0.875rem;
+    padding: 0.6875rem !important;
+  }
+}
+
+/* Small screens (640px - 767px) */
+@media (min-width: 640px) and (max-width: 767px) {
+  .auth-card {
+    max-width: 450px;
+    padding: 1.5rem;
+  }
+
+  .role-selection {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .role-btn {
+    padding: 0.875rem;
+    min-height: 60px;
+  }
+
+  .role-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .name-row {
+    gap: 0.75rem;
+  }
+
+  .company-row {
+    gap: 1rem;
+  }
+
+  .company-fields {
+    padding: 1.25rem;
+    margin: 0.75rem 0;
+  }
+}
+
+/* Tiny screens (below 400px) */
+@media (max-width: 399px) {
+  .name-row {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .name-input {
+    font-size: 0.8125rem;
+    padding: 0.625rem !important;
+  }
+}
+
+/* Extra small screens (480px - 639px) */
+@media (min-width: 480px) and (max-width: 639px) {
+  .auth-card {
+    padding: 1.25rem;
+  }
+
+  .role-selection {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .role-btn {
+    padding: 0.875rem;
+    min-height: 56px;
+  }
+
+  .role-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .name-row {
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .company-row {
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .company-fields {
+    padding: 1rem;
+    margin: 0.75rem 0;
+  }
+
+  .checkbox-label {
+    align-items: flex-start;
+  }
+}
+
+/* Mobile screens (320px - 479px) */
+@media (max-width: 479px) {
+  .auth-card {
+    padding: 1.25rem;
+    max-width: none;
+  }
+
+  .auth-header {
+    margin-bottom: 1.5rem;
+  }
+
+  .auth-title {
+    font-size: 1.5rem;
+  }
+
+  .auth-subtitle {
+    font-size: 0.8125rem;
+  }
+
+  .role-selection {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .role-btn {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5rem;
+    padding: 0.875rem;
+    min-height: 52px;
+  }
+
+  .role-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .role-content {
+    align-items: center;
+  }
+
+  .role-title {
+    font-size: 0.8125rem;
+  }
+
+  .role-subtitle {
+    font-size: 0.6875rem;
+  }
+
+  .name-row {
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .company-row {
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .company-fields {
+    padding: 0.875rem;
+    margin: 0.625rem 0;
+  }
+
+  .checkbox-label {
+    align-items: flex-start;
+    gap: 0.625rem;
+  }
+
+  .checkbox-text {
+    font-size: 0.8125rem;
+    line-height: 1.4;
+  }
+
+  .form-label {
+    font-size: 0.8125rem;
+  }
+
+  .form-input {
+    font-size: 0.8125rem;
+  }
+
+  .name-input {
+    font-size: 0.8125rem !important;
+    padding: 0.625rem !important;
+  }
+
+  .form-select {
+    font-size: 0.8125rem;
+    padding: 0.6875rem 2.25rem 0.6875rem 0.875rem;
+  }
+
+  .form-textarea {
+    font-size: 0.8125rem;
+    padding: 0.6875rem 0.875rem;
+    min-height: 70px;
+  }
+
+  .submit-btn {
+    padding: 0.8125rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  .auth-footer p {
+    font-size: 0.8125rem;
+  }
+}
+
+/* Ultra small screens (below 320px) */
+@media (max-width: 319px) {
+  .auth-card {
+    padding: 1rem;
+  }
+
+  .auth-title {
+    font-size: 1.375rem;
+  }
+
+  .role-btn {
+    padding: 0.75rem;
+    min-height: 48px;
+  }
+
+  .role-btn svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .role-title {
+    font-size: 0.75rem;
+  }
+
+  .role-subtitle {
+    font-size: 0.625rem;
+  }
+
+  .company-fields {
+    padding: 0.75rem;
+  }
+
+  .form-input,
+  .form-select,
+  .form-textarea {
+    font-size: 0.75rem;
+  }
+
+  .name-input {
+    font-size: 0.75rem !important;
+    padding: 0.5rem !important;
+  }
+
+  .submit-btn {
+    padding: 0.75rem;
+    font-size: 0.8125rem;
+  }
+}
+
+/* Landscape orientation adjustments for mobile */
+@media (max-height: 600px) and (orientation: landscape) {
+  .auth-container {
+    padding: 1rem;
+    align-items: flex-start;
+    padding-top: 1rem;
+  }
+
+  .auth-card {
+    margin: 0 auto;
+  }
+
+  .auth-header {
+    margin-bottom: 1rem;
+  }
+
+  .auth-form {
+    gap: 1rem;
+  }
+
+  .company-fields {
+    padding: 0.875rem;
+    margin: 0.625rem 0;
+  }
+
+  .auth-footer {
+    margin-top: 1rem;
+    padding-top: 1rem;
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .role-btn {
+    min-height: 48px;
+  }
+
+  .role-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .demo-btn {
+    min-height: 44px;
+  }
+
+  .submit-btn {
+    min-height: 44px;
+  }
+
+  .checkbox {
+    min-width: 20px;
+    min-height: 20px;
+  }
+
+  .form-select {
+    min-height: 44px;
+  }
+
+  .form-textarea {
+    min-height: 80px;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .role-btn {
+    transition: none;
+  }
+
+  .role-btn:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .role-btn.active {
+    transform: none;
+    box-shadow: 0 0 0 2px var(--primary);
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .role-btn {
+    border-width: 2px;
+  }
+
+  .role-btn.active {
+    border-width: 3px;
+  }
+
+  .company-fields {
+    border-width: 2px;
+  }
+}
+
+/* Enhanced form validation styles */
+.form-group .error-message {
+  display: block;
+  color: var(--destructive);
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+  min-height: 1rem;
+}
+
+.input-group.error {
+  border-color: var(--destructive);
+  box-shadow: 0 0 0 1px var(--destructive);
+}
+
+.form-input.error {
+  color: var(--destructive);
+}
+
+/* Password strength indicator (optional enhancement) */
+.password-strength {
+  margin-top: 0.5rem;
+  display: flex;
+  gap: 0.25rem;
+}
+
+.strength-bar {
+  flex: 1;
+  height: 2px;
+  background: var(--muted);
+  border-radius: 1px;
+  transition: background-color 0.2s ease;
+}
+
+.strength-bar.weak {
+  background: var(--destructive);
+}
+
+.strength-bar.medium {
+  background: #f59e0b;
+}
+
+.strength-bar.strong {
+  background: #10b981;
+}
+
+/* Loading state enhancements */
+.submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.loading-spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Focus improvements */
+.role-btn:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.checkbox:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* Success state (for future use) */
+.success-alert {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: #10b981;
+  color: white;
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+}
+
+/* Form spacing adjustments for signup */
+.auth-form {
+  gap: 1.25rem;
+}
+
+.auth-card {
+  max-width: 480px;
+}
+
+/* Enhanced checkbox styling */
+.checkbox {
+  width: 1.125rem;
+  height: 1.125rem;
+  accent-color: var(--primary);
+  margin-top: 0.125rem;
+  flex-shrink: 0;
+}
+
+/* Better error state for checkbox */
+.checkbox-label.error .checkbox {
+  accent-color: var(--destructive);
+}

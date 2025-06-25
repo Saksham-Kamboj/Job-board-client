@@ -1,0 +1,56 @@
+<div class="applicants-page">
+  <div class="container">
+    <div class="header">
+      <h1>Job Applicants</h1>
+      <p>{{ jobTitle }} - Job ID: {{ jobId }}</p>
+    </div>
+
+    <div class="applicants-list" *ngIf="applicants.length > 0; else noApplicants">
+      <div class="applicant-card" *ngFor="let applicant of applicants">
+        <div class="applicant-info">
+          <h3>{{ applicant.name }}</h3>
+          <p class="contact-info">
+            <span class="email">{{ applicant.email }}</span>
+            <span class="phone">{{ applicant.phone }}</span>
+          </p>
+          <p class="experience">Experience: {{ applicant.experience }}</p>
+          <div class="skills">
+            <span class="skill-tag" *ngFor="let skill of applicant.skills">{{ skill }}</span>
+          </div>
+          <p class="applied-date">Applied on: {{ applicant.appliedDate | date }}</p>
+        </div>
+
+        <div class="applicant-status">
+          <div class="status-section">
+            <span class="status-badge" [class]="'status-' + applicant.status.toLowerCase().replace(' ', '-')">
+              {{ applicant.status }}
+            </span>
+            <select class="status-select" [value]="applicant.status"
+              (change)="updateStatus(applicant.id, $any($event.target).value)">
+              <option value="Under Review">Under Review</option>
+              <option value="Interview Scheduled">Interview Scheduled</option>
+              <option value="Accepted">Accepted</option>
+              <option value="Rejected">Rejected</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="applicant-actions">
+          <button class="download-btn" (click)="downloadResume(applicant.id)">
+            Download Resume
+          </button>
+          <button class="contact-btn" (click)="contactApplicant(applicant.id)">
+            Contact
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #noApplicants>
+      <div class="no-applicants">
+        <h2>No Applicants Yet</h2>
+        <p>No one has applied to this job yet. Share your job posting to get more visibility!</p>
+      </div>
+    </ng-template>
+  </div>
+</div>

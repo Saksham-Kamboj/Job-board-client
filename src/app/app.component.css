@@ -1,0 +1,28 @@
+/* App Layout Styles */
+.app-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--background);
+    color: var(--foreground);
+    /* Add padding-top to account for fixed header */
+    padding-top: 4rem;
+    /* Height of the header (64px) */
+    transition: padding-top 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Ensure router-outlet content takes available space */
+router-outlet+* {
+    flex: 1;
+}
+
+/* Ensure footer stays at bottom */
+app-footer {
+    margin-top: auto;
+}
+
+/* Global body styles */
+:host {
+    display: block;
+    min-height: 100vh;
+}

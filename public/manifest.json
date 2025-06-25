@@ -1,0 +1,21 @@
+{
+  "name": "Job Board - Find Your Dream Job",
+  "short_name": "Job Board",
+  "description": "Find your dream job with Job Board - the best platform for job seekers and employers",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F54A00",
+  "theme_color": "#F54A00",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["business", "productivity"],
+  "lang": "en",
+  "dir": "ltr"
+}

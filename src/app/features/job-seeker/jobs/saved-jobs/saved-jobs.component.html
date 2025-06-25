@@ -1,0 +1,52 @@
+<div class="saved-jobs-page">
+  <div class="container">
+    <div class="header">
+      <h1>Saved Jobs</h1>
+      <p>Jobs you've saved for later review</p>
+    </div>
+
+    <!-- Loading State -->
+    <div class="loading" *ngIf="isLoading">
+      <div class="loading-spinner"></div>
+      <p>Loading your saved jobs...</p>
+    </div>
+
+    <!-- Error State -->
+    <div class="error" *ngIf="error && !isLoading">
+      <h2>Error Loading Saved Jobs</h2>
+      <p>{{ error }}</p>
+      <button class="retry-btn" (click)="ngOnInit()">Try Again</button>
+    </div>
+
+    <div class="jobs-list" *ngIf="!isLoading && !error && savedJobs.length > 0; else noJobs">
+      <div class="job-card" *ngFor="let job of savedJobs">
+        <div class="job-info">
+          <h3>
+            <a [routerLink]="['/jobs', job.jobId]">{{ job.jobTitle }}</a>
+          </h3>
+          <p class="company">{{ job.company }}</p>
+          <p class="location">{{ job.location }}</p>
+          <p class="salary">{{ job.salary }}</p>
+          <p class="job-type">{{ job.jobType }}</p>
+          <p class="saved-date">Saved on: {{ job.savedAt | date:'mediumDate' }}</p>
+        </div>
+        <div class="job-actions">
+          <button class="apply-btn" [routerLink]="['/jobs', job.jobId, 'apply']">
+            Apply Now
+          </button>
+          <button class="remove-btn" (click)="removeSavedJob(job.jobId)">
+            Remove
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #noJobs>
+      <div class="no-jobs">
+        <h2>No Saved Jobs</h2>
+        <p>You haven't saved any jobs yet. Browse jobs and save the ones that interest you!</p>
+        <a routerLink="/jobseeker/jobs" class="browse-btn">Browse Jobs</a>
+      </div>
+    </ng-template>
+  </div>
+</div>

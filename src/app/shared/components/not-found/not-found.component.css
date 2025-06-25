@@ -1,0 +1,266 @@
+/* 404 Not Found Component Styles */
+.not-found-container {
+    min-height: calc(100vh - 4rem);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+    background: var(--background);
+}
+
+.not-found-content {
+    max-width: 600px;
+    width: 100%;
+    text-align: center;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* Error Illustration */
+.error-illustration {
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+.error-number {
+    font-size: 8rem;
+    font-weight: 900;
+    color: var(--primary);
+    opacity: 0.1;
+    line-height: 1;
+    margin-bottom: -4rem;
+    position: relative;
+    z-index: 1;
+}
+
+.error-icon {
+    position: relative;
+    z-index: 2;
+    color: var(--muted-foreground);
+    margin-bottom: 1rem;
+}
+
+.error-icon svg {
+    width: 120px;
+    height: 120px;
+    opacity: 0.8;
+}
+
+/* Error Message */
+.error-message {
+    margin-bottom: 3rem;
+}
+
+.error-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--foreground);
+    margin: 0 0 1rem 0;
+    line-height: 1.2;
+}
+
+.error-description {
+    font-size: 1.125rem;
+    color: var(--muted-foreground);
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* Action Buttons */
+.error-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+}
+
+.action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.5rem;
+    border-radius: var(--radius);
+    font-weight: 600;
+    font-size: 0.9375rem;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 120px;
+    justify-content: center;
+}
+
+.action-btn.primary {
+    background: var(--primary);
+    color: var(--primary-foreground);
+}
+
+.action-btn.primary:hover {
+    background: var(--primary);
+    opacity: 0.9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.action-btn.secondary {
+    background: var(--secondary);
+    color: var(--secondary-foreground);
+    border: 1px solid var(--border);
+}
+
+.action-btn.secondary:hover {
+    background: var(--muted);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.action-btn svg {
+    flex-shrink: 0;
+}
+
+/* Helpful Links */
+.helpful-links {
+    border-top: 1px solid var(--border);
+    padding-top: 2rem;
+}
+
+.links-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--foreground);
+    margin: 0 0 1.5rem 0;
+}
+
+.links-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.help-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--foreground);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+    justify-content: center;
+}
+
+.help-link:hover {
+    background: var(--muted);
+    border-color: var(--primary);
+    color: var(--primary);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.help-link svg {
+    flex-shrink: 0;
+    opacity: 0.8;
+}
+
+.help-link:hover svg {
+    opacity: 1;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .not-found-container {
+        padding: 1.5rem 1rem;
+    }
+
+    .error-number {
+        font-size: 6rem;
+        margin-bottom: -3rem;
+    }
+
+    .error-icon svg {
+        width: 100px;
+        height: 100px;
+    }
+
+    .error-title {
+        font-size: 2rem;
+    }
+
+    .error-description {
+        font-size: 1rem;
+    }
+
+    .error-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .action-btn {
+        width: 100%;
+        max-width: 280px;
+    }
+
+    .links-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .error-number {
+        font-size: 4rem;
+        margin-bottom: -2rem;
+    }
+
+    .error-icon svg {
+        width: 80px;
+        height: 80px;
+    }
+
+    .error-title {
+        font-size: 1.75rem;
+    }
+
+    .links-grid {
+        grid-template-columns: 1fr;
+        max-width: 240px;
+    }
+
+    .help-link {
+        padding: 0.875rem 1rem;
+    }
+}
+
+/* Dark mode enhancements */
+@media (prefers-color-scheme: dark) {
+    .action-btn.primary:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .action-btn.secondary:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .help-link:hover {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+}

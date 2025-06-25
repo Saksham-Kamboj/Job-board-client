@@ -1,0 +1,203 @@
+<div class="not-found-container">
+
+
+    <div class="not-found-content">
+        <!-- 404 Illustration -->
+        <div class="error-illustration">
+            <div class="error-number">404</div>
+            <div class="error-icon">
+                <svg width="120" height="120" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
+                    <path d="M16 16s-1.5-2-4-2-4 2-4 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                    <line x1="9" y1="9" x2="9.01" y2="9" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" />
+                    <line x1="15" y1="9" x2="15.01" y2="9" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" />
+                </svg>
+            </div>
+        </div>
+
+        <!-- Error Message -->
+        <div class="error-message">
+            <h1 class="error-title">Page Not Found</h1>
+            <p class="error-description">
+                Sorry, the page you are looking for doesn't exist or has been moved.
+            </p>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="error-actions">
+            <button (click)="goBack()" class="action-btn secondary">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M19 12H5" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <path d="M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+                Go Back
+            </button>
+
+            <a routerLink="/" class="action-btn primary">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" stroke-width="2" />
+                    <polyline points="9,22 9,12 15,12 15,22" stroke="currentColor" stroke-width="2" />
+                </svg>
+                Go Home
+            </a>
+        </div>
+
+        <!-- Helpful Links -->
+        <div class="helpful-links">
+            <p class="links-title">You might be looking for:</p>
+            <div class="links-grid">
+                <!-- Common links for all users -->
+                <a routerLink="/jobs" class="help-link">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2" stroke="currentColor" stroke-width="2" />
+                        <line x1="8" y1="21" x2="16" y2="21" stroke="currentColor" stroke-width="2" />
+                        <line x1="12" y1="17" x2="12" y2="21" stroke="currentColor" stroke-width="2" />
+                    </svg>
+                    Browse Jobs
+                </a>
+
+                <!-- Show different links based on authentication status and role -->
+                <ng-container *ngIf="!(isAuthenticated$ | async)">
+                    <!-- Guest user links -->
+                    <a routerLink="/auth/signin" class="help-link">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" stroke="currentColor"
+                                stroke-width="2" />
+                            <polyline points="10,17 15,12 10,7" stroke="currentColor" stroke-width="2" />
+                            <line x1="15" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="2" />
+                        </svg>
+                        Sign In
+                    </a>
+
+                    <a routerLink="/auth/signup" class="help-link">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor"
+                                stroke-width="2" />
+                            <circle cx="8.5" cy="7" r="4" stroke="currentColor" stroke-width="2" />
+                            <line x1="20" y1="8" x2="20" y2="14" stroke="currentColor" stroke-width="2" />
+                            <line x1="23" y1="11" x2="17" y2="11" stroke="currentColor" stroke-width="2" />
+                        </svg>
+                        Sign Up
+                    </a>
+                </ng-container>
+
+                <ng-container *ngIf="(isAuthenticated$ | async)">
+                    <!-- Role-based Dashboard Links -->
+                    <a *ngIf="isAdmin" routerLink="/admin/dashboard" class="help-link">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="3" y="3" width="7" height="7" stroke="currentColor" stroke-width="2" />
+                            <rect x="14" y="3" width="7" height="7" stroke="currentColor" stroke-width="2" />
+                            <rect x="14" y="14" width="7" height="7" stroke="currentColor" stroke-width="2" />
+                            <rect x="3" y="14" width="7" height="7" stroke="currentColor" stroke-width="2" />
+                        </svg>
+                        Admin Dashboard
+                    </a>
+                    <a *ngIf="isCompany" routerLink="/company/dashboard" class="help-link">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="3" y="3" width="7" height="7" stroke="currentColor" stroke-width="2" />
+                            <rect x="14" y="3" width="7" height="7" stroke="currentColor" stroke-width="2" />
+                            <rect x="14" y="14" width="7" height="7" stroke="currentColor" stroke-width="2" />
+                            <rect x="3" y="14" width="7" height="7" stroke="currentColor" stroke-width="2" />
+                        </svg>
+                        Company Dashboard
+                    </a>
+                    <a *ngIf="isJobSeeker" routerLink="/jobseeker/dashboard" class="help-link">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="3" y="3" width="7" height="7" stroke="currentColor" stroke-width="2" />
+                            <rect x="14" y="3" width="7" height="7" stroke="currentColor" stroke-width="2" />
+                            <rect x="14" y="14" width="7" height="7" stroke="currentColor" stroke-width="2" />
+                            <rect x="3" y="14" width="7" height="7" stroke="currentColor" stroke-width="2" />
+                        </svg>
+                        Dashboard
+                    </a>
+
+                    <!-- Role-based Profile Links -->
+                    <a *ngIf="isAdmin" routerLink="/admin/profile" class="help-link">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor"
+                                stroke-width="2" />
+                            <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" />
+                        </svg>
+                        Admin Profile
+                    </a>
+                    <a *ngIf="isCompany" routerLink="/company/profile" class="help-link">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor"
+                                stroke-width="2" />
+                            <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" />
+                        </svg>
+                        Company Profile
+                    </a>
+                    <a *ngIf="isJobSeeker" routerLink="/jobseeker/profile" class="help-link">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor"
+                                stroke-width="2" />
+                            <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" />
+                        </svg>
+                        Profile
+                    </a>
+
+                    <!-- Role-specific links -->
+                    <ng-container *ngIf="(currentUser$ | async)?.role === 'company'">
+                        <a routerLink="/post-job" class="help-link">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor" stroke-width="2" />
+                                <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor" stroke-width="2" />
+                            </svg>
+                            Post a Job
+                        </a>
+                    </ng-container>
+
+                    <ng-container *ngIf="(currentUser$ | async)?.role === 'admin'">
+                        <a routerLink="/admin/dashboard" class="help-link">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" />
+                                <path
+                                    d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1 1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"
+                                    stroke="currentColor" stroke-width="2" />
+                            </svg>
+                            Admin Panel
+                        </a>
+                    </ng-container>
+                </ng-container>
+
+                <!-- Role-based Settings links for authenticated users -->
+                <ng-container *ngIf="(isAuthenticated$ | async) && (currentUser$ | async) as user">
+                    <a *ngIf="user.role === 'admin'" routerLink="/admin/settings" class="help-link">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" />
+                            <path
+                                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1 1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"
+                                stroke="currentColor" stroke-width="2" />
+                        </svg>
+                        Admin Settings
+                    </a>
+                    <a *ngIf="user.role === 'company'" routerLink="/company/settings" class="help-link">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" />
+                            <path
+                                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1 1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"
+                                stroke="currentColor" stroke-width="2" />
+                        </svg>
+                        Company Settings
+                    </a>
+                    <a *ngIf="user.role === 'job-seeker'" routerLink="/jobseeker/settings" class="help-link">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" />
+                            <path
+                                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1 1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"
+                                stroke="currentColor" stroke-width="2" />
+                        </svg>
+                        Settings
+                    </a>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</div>

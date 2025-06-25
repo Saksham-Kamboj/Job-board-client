@@ -1,0 +1,137 @@
+.scroll-to-top-btn {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 3rem;
+  height: 3rem;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1000;
+  opacity: 0;
+  transform: translateY(20px) scale(0.8);
+  animation: fadeInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.scroll-to-top-btn:hover {
+  background: var(--primary);
+  opacity: 1;
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+}
+
+.scroll-to-top-btn:active {
+  transform: translateY(-1px) scale(0.98);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: all 0.1s ease;
+}
+
+.scroll-to-top-btn svg {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.scroll-to-top-btn:hover svg {
+  transform: translateY(-2px);
+}
+
+/* Scrolling state */
+.scroll-to-top-btn.scrolling {
+  opacity: 0.7;
+  transform: translateY(0) scale(0.95);
+}
+
+/* Scroll direction states */
+.scroll-to-top-btn.scroll-up {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.scroll-to-top-btn.scroll-down {
+  opacity: 0.6;
+  transform: translateY(5px) scale(0.9);
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.6);
+  }
+
+  50% {
+    opacity: 0.8;
+    transform: translateY(-5px) scale(1.1);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Pulse animation for attention */
+@keyframes pulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.05);
+    opacity: 0.9;
+  }
+}
+
+.scroll-to-top-btn.scroll-up:hover {
+  animation: pulse 2s infinite;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .scroll-to-top-btn {
+    bottom: 1.5rem;
+    right: 1.5rem;
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  .scroll-to-top-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .scroll-to-top-btn {
+    bottom: 1rem;
+    right: 1rem;
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+
+  .scroll-to-top-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+  .scroll-to-top-btn {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  .scroll-to-top-btn:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  }
+}

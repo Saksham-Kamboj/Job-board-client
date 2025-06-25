@@ -1,0 +1,463 @@
+<div class="company-settings-container">
+  <!-- Profile Header -->
+  <div class="profile-header">
+    <div class="profile-avatar">
+      <div class="avatar-circle">
+        {{ getUserInitials() }}
+      </div>
+    </div>
+    <div class="profile-info">
+      <h1 class="profile-name">{{ getUserFullName() }}</h1>
+      <p class="profile-role">{{ getRoleDisplayName() }}</p>
+      <p class="profile-email">{{ currentUser?.email }}</p>
+    </div>
+  </div>
+
+  <div class="settings-layout">
+    <!-- Settings Navigation -->
+    <div class="settings-nav">
+      <div class="nav-header">
+        <h2>Settings Categories</h2>
+      </div>
+      <nav class="nav-menu">
+        <button *ngFor="let category of settingsCategories" (click)="setActiveCategory(category.id)"
+          [class.active]="activeCategory === category.id" class="nav-item">
+          <div class="nav-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Dynamic icon based on category.icon -->
+              <ng-container [ngSwitch]="category.icon">
+                <g *ngSwitchCase="'palette'">
+                  <circle cx="13.5" cy="6.5" r=".5" stroke="currentColor" stroke-width="2" />
+                  <circle cx="17.5" cy="10.5" r=".5" stroke="currentColor" stroke-width="2" />
+                  <circle cx="8.5" cy="7.5" r=".5" stroke="currentColor" stroke-width="2" />
+                  <circle cx="6.5" cy="12.5" r=".5" stroke="currentColor" stroke-width="2" />
+                  <path
+                    d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 7.012 17.461 2 12 2z"
+                    stroke="currentColor" stroke-width="2" />
+                </g>
+                <g *ngSwitchCase="'user'">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2" />
+                  <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" />
+                </g>
+                <g *ngSwitchCase="'bell'">
+                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="currentColor" stroke-width="2" />
+                  <path d="M13.73 21a2 2 0 0 1-3.46 0" stroke="currentColor" stroke-width="2" />
+                </g>
+                <g *ngSwitchCase="'building'">
+                  <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" stroke="currentColor" stroke-width="2" />
+                  <line x1="3" y1="6" x2="21" y2="6" stroke="currentColor" stroke-width="2" />
+                  <path d="M16 10a4 4 0 0 1-8 0" stroke="currentColor" stroke-width="2" />
+                </g>
+                <g *ngSwitchCase="'credit-card'">
+                  <rect x="1" y="4" width="22" height="16" rx="2" ry="2" stroke="currentColor" stroke-width="2" />
+                  <line x1="1" y1="10" x2="23" y2="10" stroke="currentColor" stroke-width="2" />
+                </g>
+                <g *ngSwitchCase="'shield'">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="2" />
+                </g>
+              </ng-container>
+            </svg>
+          </div>
+          <div class="nav-content">
+            <span class="nav-title">{{ category.title }}</span>
+            <span class="nav-description">{{ category.description }}</span>
+          </div>
+        </button>
+      </nav>
+    </div>
+
+    <!-- Settings Content -->
+    <div class="settings-content">
+      <!-- Appearance Settings -->
+      <div *ngIf="activeCategory === 'appearance'" class="settings-section">
+        <div class="section-header">
+          <h2>Appearance Settings</h2>
+          <p>Customize your company dashboard theme and layout</p>
+        </div>
+
+        <div class="setting-group">
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Theme</h3>
+              <p>Choose between light and dark theme for your company dashboard</p>
+            </div>
+            <div class="setting-control">
+              <button (click)="toggleTheme()" class="theme-toggle">
+                <span class="theme-option" [class.active]="!isDarkMode">Light</span>
+                <span class="theme-option" [class.active]="isDarkMode">Dark</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Account Security Settings -->
+      <div *ngIf="activeCategory === 'account'" class="settings-section">
+        <div class="section-header">
+          <h2>Account Security</h2>
+          <p>Manage your company account and security settings</p>
+        </div>
+
+        <div class="setting-group">
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Change Password</h3>
+              <p>Update your company account password</p>
+            </div>
+            <div class="setting-control">
+              <button (click)="toggleChangePassword()" class="btn-secondary">
+                {{ isChangingPassword ? 'Cancel' : 'Change Password' }}
+              </button>
+            </div>
+          </div>
+
+          <!-- Password Change Form -->
+          <div *ngIf="isChangingPassword" class="password-form">
+            <form [formGroup]="passwordForm" (ngSubmit)="onPasswordSubmit()">
+              <div class="form-group">
+                <label for="currentPassword">Current Password</label>
+                <input type="password" id="currentPassword" formControlName="currentPassword" class="form-input">
+                <div *ngIf="getFieldError('currentPassword')" class="field-error">
+                  {{ getFieldError('currentPassword') }}
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="newPassword">New Password</label>
+                <input type="password" id="newPassword" formControlName="newPassword" class="form-input">
+                <div *ngIf="getFieldError('newPassword')" class="field-error">
+                  {{ getFieldError('newPassword') }}
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="confirmPassword">Confirm New Password</label>
+                <input type="password" id="confirmPassword" formControlName="confirmPassword" class="form-input">
+                <div *ngIf="getFieldError('confirmPassword')" class="field-error">
+                  {{ getFieldError('confirmPassword') }}
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" class="btn-primary" [disabled]="isLoading || passwordForm.invalid">
+                  {{ isLoading ? 'Updating...' : 'Update Password' }}
+                </button>
+              </div>
+            </form>
+
+            <!-- Success/Error Messages -->
+            <div *ngIf="passwordUpdateSuccess" class="success-message">
+              Password updated successfully!
+            </div>
+            <div *ngIf="errorMessage" class="error-message">
+              {{ errorMessage }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hiring Notifications -->
+      <div *ngIf="activeCategory === 'notifications'" class="settings-section">
+        <div class="section-header">
+          <h2>Hiring Notifications</h2>
+          <p>Configure application and hiring notifications</p>
+        </div>
+
+        <div class="setting-group">
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Email Notifications</h3>
+              <p>Receive hiring notifications via email</p>
+            </div>
+            <div class="setting-control">
+              <label class="toggle-switch">
+                <input type="checkbox" [checked]="notificationSettings.emailNotifications"
+                  (change)="onNotificationChange($event, 'emailNotifications')">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>New Applications</h3>
+              <p>Get notified when candidates apply to your jobs</p>
+            </div>
+            <div class="setting-control">
+              <label class="toggle-switch">
+                <input type="checkbox" [checked]="notificationSettings.newApplications"
+                  (change)="onNotificationChange($event, 'newApplications')">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Interview Reminders</h3>
+              <p>Get reminders about scheduled interviews</p>
+            </div>
+            <div class="setting-control">
+              <label class="toggle-switch">
+                <input type="checkbox" [checked]="notificationSettings.interviewReminders"
+                  (change)="onNotificationChange($event, 'interviewReminders')">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Job Expiration Alerts</h3>
+              <p>Get notified when your job postings are about to expire</p>
+            </div>
+            <div class="setting-control">
+              <label class="toggle-switch">
+                <input type="checkbox" [checked]="notificationSettings.jobExpirationAlerts"
+                  (change)="onNotificationChange($event, 'jobExpirationAlerts')">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Weekly Reports</h3>
+              <p>Receive weekly hiring activity reports</p>
+            </div>
+            <div class="setting-control">
+              <label class="toggle-switch">
+                <input type="checkbox" [checked]="notificationSettings.weeklyReports"
+                  (change)="onNotificationChange($event, 'weeklyReports')">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Company Profile Settings -->
+      <div *ngIf="activeCategory === 'company'" class="settings-section">
+        <div class="section-header">
+          <h2>Company Profile Settings</h2>
+          <p>Manage your company profile and hiring preferences</p>
+        </div>
+
+        <div class="setting-group">
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Auto-Reply to Applications</h3>
+              <p>Automatically send confirmation emails to applicants</p>
+            </div>
+            <div class="setting-control">
+              <label class="toggle-switch">
+                <input type="checkbox" [checked]="companySettings.autoReplyToApplications"
+                  (change)="onCompanySettingChange($event, 'autoReplyToApplications')">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Show Company Size</h3>
+              <p>Display your company size on job postings</p>
+            </div>
+            <div class="setting-control">
+              <label class="toggle-switch">
+                <input type="checkbox" [checked]="companySettings.showCompanySize"
+                  (change)="onCompanySettingChange($event, 'showCompanySize')">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Show Salary Ranges</h3>
+              <p>Display salary ranges on your job postings</p>
+            </div>
+            <div class="setting-control">
+              <label class="toggle-switch">
+                <input type="checkbox" [checked]="companySettings.showSalaryRanges"
+                  (change)="onCompanySettingChange($event, 'showSalaryRanges')">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Enable Quick Apply</h3>
+              <p>Allow candidates to apply with one click using their profile</p>
+            </div>
+            <div class="setting-control">
+              <label class="toggle-switch">
+                <input type="checkbox" [checked]="companySettings.enableQuickApply"
+                  (change)="onCompanySettingChange($event, 'enableQuickApply')">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Require Cover Letter</h3>
+              <p>Make cover letters mandatory for job applications</p>
+            </div>
+            <div class="setting-control">
+              <label class="toggle-switch">
+                <input type="checkbox" [checked]="companySettings.requireCoverLetter"
+                  (change)="onCompanySettingChange($event, 'requireCoverLetter')">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Public Company Profile</h3>
+              <p>Make your company profile visible to job seekers</p>
+            </div>
+            <div class="setting-control">
+              <label class="toggle-switch">
+                <input type="checkbox" [checked]="companySettings.publicCompanyProfile"
+                  (change)="onCompanySettingChange($event, 'publicCompanyProfile')">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Billing & Plans -->
+      <div *ngIf="activeCategory === 'billing'" class="settings-section">
+        <div class="section-header">
+          <h2>Billing & Plans</h2>
+          <p>Manage your subscription and billing information</p>
+        </div>
+
+        <div class="setting-group">
+          <div class="billing-overview">
+            <div class="billing-card">
+              <h3>Current Plan</h3>
+              <div class="plan-info">
+                <span class="plan-name">{{ billingSettings.currentPlan }}</span>
+                <span class="plan-usage">{{ billingSettings.jobPostingsUsed }}/{{ billingSettings.jobPostingsLimit }}
+                  job postings used</span>
+              </div>
+              <div class="plan-actions">
+                <button (click)="upgradeSubscription()" class="btn-primary">Upgrade Plan</button>
+                <button (click)="cancelSubscription()" class="btn-outline">Cancel Subscription</button>
+              </div>
+            </div>
+
+            <div class="billing-card">
+              <h3>Next Billing</h3>
+              <div class="billing-info">
+                <span class="billing-date">{{ billingSettings.nextBillingDate }}</span>
+                <span class="billing-amount">$99.00</span>
+              </div>
+              <div class="billing-actions">
+                <button (click)="downloadInvoices()" class="btn-outline">Download Invoices</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Auto-Renewal</h3>
+              <p>Automatically renew your subscription</p>
+            </div>
+            <div class="setting-control">
+              <label class="toggle-switch">
+                <input type="checkbox" [checked]="billingSettings.autoRenew" disabled>
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Privacy & Data -->
+      <div *ngIf="activeCategory === 'privacy'" class="settings-section">
+        <div class="section-header">
+          <h2>Privacy & Data</h2>
+          <p>Control your company data privacy and visibility</p>
+        </div>
+
+        <div class="setting-group">
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Show Company in Search</h3>
+              <p>Allow your company to appear in job seeker searches</p>
+            </div>
+            <div class="setting-control">
+              <label class="toggle-switch">
+                <input type="checkbox" [checked]="privacySettings.showCompanyInSearch"
+                  (change)="onPrivacyChange($event, 'showCompanyInSearch')">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Allow Data Export</h3>
+              <p>Allow candidates to export their application data</p>
+            </div>
+            <div class="setting-control">
+              <label class="toggle-switch">
+                <input type="checkbox" [checked]="privacySettings.allowDataExport"
+                  (change)="onPrivacyChange($event, 'allowDataExport')">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Share Analytics</h3>
+              <p>Share anonymized hiring analytics with platform insights</p>
+            </div>
+            <div class="setting-control">
+              <label class="toggle-switch">
+                <input type="checkbox" [checked]="privacySettings.shareAnalytics"
+                  (change)="onPrivacyChange($event, 'shareAnalytics')">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Data Retention Period</h3>
+              <p>How long to keep candidate application data</p>
+            </div>
+            <div class="setting-control">
+              <select [value]="privacySettings.dataRetentionPeriod"
+                (change)="onPrivacyChange($event, 'dataRetentionPeriod')" class="form-select">
+                <option value="1-year">1 Year</option>
+                <option value="2-years">2 Years</option>
+                <option value="3-years">3 Years</option>
+                <option value="indefinite">Indefinite</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Data Actions -->
+        <div class="setting-group">
+          <div class="section-header">
+            <h3>Data Management</h3>
+            <p>Export or manage your company data</p>
+          </div>
+
+          <div class="action-buttons">
+            <button (click)="exportCompanyData()" class="btn-outline">Export Company Data</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

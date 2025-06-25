@@ -1,0 +1,342 @@
+<header class="header">
+    <div class="header-container">
+        <!-- Logo Section -->
+        <div class="logo-section">
+            <a routerLink="" class="logo">
+                <div class="logo-icon">
+                    JB
+                </div>
+                <span class="logo-text">JobBoard</span>
+            </a>
+        </div>
+
+        <!-- Desktop Navigation -->
+        <nav class="desktop-nav">
+            <!-- Public Navigation (when not logged in) -->
+            <ng-container *ngIf="!isLoggedIn">
+                <a routerLink="/jobs" routerLinkActive="active" class="nav-link">Find Jobs</a>
+                <a routerLink="/about" routerLinkActive="active" class="nav-link">About</a>
+                <a routerLink="/contact" routerLinkActive="active" class="nav-link">Contact</a>
+            </ng-container>
+
+            <!-- Admin Navigation -->
+            <ng-container *ngIf="isLoggedIn && currentUser?.role === 'admin'">
+                <a routerLink="/admin/manage-users" routerLinkActive="active" class="nav-link">Manage Users</a>
+                <a routerLink="/admin/manage-jobs" routerLinkActive="active" class="nav-link">Manage Jobs</a>
+                <a routerLink="/admin/reports" routerLinkActive="active" class="nav-link">Reports</a>
+            </ng-container>
+
+            <!-- Company Navigation -->
+            <ng-container *ngIf="isLoggedIn && currentUser?.role === 'company'">
+                <a routerLink="/company/post-job" routerLinkActive="active" class="nav-link">Post Job</a>
+                <a routerLink="/company/my-jobs" routerLinkActive="active" class="nav-link">My Jobs</a>
+            </ng-container>
+
+            <!-- Job Seeker Navigation -->
+            <ng-container *ngIf="isLoggedIn && currentUser?.role === 'job-seeker'">
+                <a routerLink="/jobseeker/jobs" routerLinkActive="active" class="nav-link">Jobs</a>
+                <a routerLink="/jobseeker/applied" routerLinkActive="active" class="nav-link">Applied Jobs</a>
+                <a routerLink="/jobseeker/saved" routerLinkActive="active" class="nav-link">Saved Jobs</a>
+            </ng-container>
+        </nav>
+
+        <!-- Desktop Search Bar -->
+        <div class="search-container desktop-search">
+            <div class="search-box">
+                <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2" />
+                    <path d="m21 21-4.35-4.35" stroke="currentColor" stroke-width="2" />
+                </svg>
+                <input type="text" placeholder="Search jobs, companies..." [(ngModel)]="searchQuery"
+                    (keyup.enter)="onSearch()" class="search-input">
+                <button *ngIf="searchQuery" (click)="searchQuery = ''" class="clear-search">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2" />
+                        <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- User Actions -->
+        <div class="user-actions">
+            <!-- Mobile Search Button -->
+            <button (click)="toggleSearch()" class="mobile-search-toggle" aria-label="Open search">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2" />
+                    <path d="m21 21-4.35-4.35" stroke="currentColor" stroke-width="2" />
+                </svg>
+            </button>
+
+            <!-- User Profile or Login -->
+            <div *ngIf="!isLoggedIn" class="auth-buttons">
+                <a routerLink="/login" class="login-btn">Sign In</a>
+                <a routerLink="/register" class="signup-btn">Sign Up</a>
+            </div>
+
+            <div *ngIf="isLoggedIn" class="user-profile">
+                <div class="profile-dropdown">
+                    <button class="profile-trigger">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face"
+                            [alt]="currentUser?.firstName + ' ' + currentUser?.lastName" class="avatar">
+                        <span class="profile-name">{{ currentUser?.firstName }} {{ currentUser?.lastName }}</span>
+                        <svg class="dropdown-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2" />
+                        </svg>
+                    </button>
+                    <div class="dropdown-menu">
+                        <!-- Role-based Profile Links -->
+                        <a *ngIf="currentUser?.role === 'admin'" routerLink="/admin/profile" class="dropdown-item">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor"
+                                    stroke-width="2" />
+                                <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" />
+                            </svg>
+                            Admin Profile
+                        </a>
+                        <a *ngIf="currentUser?.role === 'company'" routerLink="/company/profile" class="dropdown-item">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor"
+                                    stroke-width="2" />
+                                <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" />
+                            </svg>
+                            Company Profile
+                        </a>
+                        <a *ngIf="currentUser?.role === 'job-seeker'" routerLink="/jobseeker/profile"
+                            class="dropdown-item">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor"
+                                    stroke-width="2" />
+                                <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" />
+                            </svg>
+                            Profile
+                        </a>
+                        <!-- Role-based Dashboard Links -->
+                        <a *ngIf="currentUser?.role === 'admin'" routerLink="/admin/dashboard" class="dropdown-item">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <rect x="3" y="3" width="7" height="7" stroke="currentColor" stroke-width="2" />
+                                <rect x="14" y="3" width="7" height="7" stroke="currentColor" stroke-width="2" />
+                                <rect x="14" y="14" width="7" height="7" stroke="currentColor" stroke-width="2" />
+                                <rect x="3" y="14" width="7" height="7" stroke="currentColor" stroke-width="2" />
+                            </svg>
+                            Admin Dashboard
+                        </a>
+                        <a *ngIf="currentUser?.role === 'company'" routerLink="/company/dashboard"
+                            class="dropdown-item">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <rect x="3" y="3" width="7" height="7" stroke="currentColor" stroke-width="2" />
+                                <rect x="14" y="3" width="7" height="7" stroke="currentColor" stroke-width="2" />
+                                <rect x="14" y="14" width="7" height="7" stroke="currentColor" stroke-width="2" />
+                                <rect x="3" y="14" width="7" height="7" stroke="currentColor" stroke-width="2" />
+                            </svg>
+                            Company Dashboard
+                        </a>
+                        <a *ngIf="currentUser?.role === 'job-seeker'" routerLink="/jobseeker/dashboard"
+                            class="dropdown-item">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <rect x="3" y="3" width="7" height="7" stroke="currentColor" stroke-width="2" />
+                                <rect x="14" y="3" width="7" height="7" stroke="currentColor" stroke-width="2" />
+                                <rect x="14" y="14" width="7" height="7" stroke="currentColor" stroke-width="2" />
+                                <rect x="3" y="14" width="7" height="7" stroke="currentColor" stroke-width="2" />
+                            </svg>
+                            Dashboard
+                        </a>
+                        <!-- Role-based Settings Links -->
+                        <a *ngIf="currentUser?.role === 'admin'" routerLink="/admin/settings" class="dropdown-item">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" />
+                                <path
+                                    d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1 1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"
+                                    stroke="currentColor" stroke-width="2" />
+                            </svg>
+                            Admin Settings
+                        </a>
+                        <a *ngIf="currentUser?.role === 'company'" routerLink="/company/settings" class="dropdown-item">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" />
+                                <path
+                                    d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1 1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"
+                                    stroke="currentColor" stroke-width="2" />
+                            </svg>
+                            Company Settings
+                        </a>
+                        <a *ngIf="currentUser?.role === 'job-seeker'" routerLink="/jobseeker/settings"
+                            class="dropdown-item">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" />
+                                <path
+                                    d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1 1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"
+                                    stroke="currentColor" stroke-width="2" />
+                            </svg>
+                            Settings
+                        </a>
+                        <hr class="dropdown-divider">
+                        <a (click)="onLogout()" class="dropdown-item logout">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" stroke="currentColor"
+                                    stroke-width="2" />
+                                <polyline points="16,17 21,12 16,7" stroke="currentColor" stroke-width="2" />
+                                <line x1="21" y1="12" x2="9" y2="12" stroke="currentColor" stroke-width="2" />
+                            </svg>
+                            Sign Out
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button (click)="toggleMenu()" class="mobile-menu-toggle"
+                [attr.aria-label]="isMenuOpen ? 'Close menu' : 'Open menu'">
+                <span class="hamburger-line" [class.active]="isMenuOpen"></span>
+                <span class="hamburger-line" [class.active]="isMenuOpen"></span>
+                <span class="hamburger-line" [class.active]="isMenuOpen"></span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Mobile Search Popup -->
+    <div class="mobile-search-popup" [class.open]="isSearchOpen">
+        <div class="mobile-search-overlay" (click)="closeSearch()"></div>
+        <div class="mobile-search-content">
+            <div class="mobile-search-header">
+                <h3>Search Jobs</h3>
+                <button (click)="closeSearch()" class="close-search" aria-label="Close search">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2" />
+                        <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2" />
+                    </svg>
+                </button>
+            </div>
+            <div class="mobile-search-form">
+                <div class="mobile-search-box">
+                    <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2" />
+                        <path d="m21 21-4.35-4.35" stroke="currentColor" stroke-width="2" />
+                    </svg>
+                    <input type="text" placeholder="Search jobs, companies..." [(ngModel)]="searchQuery"
+                        (keyup.enter)="onSearch(); closeSearch()" class="mobile-search-input">
+                    <button *ngIf="searchQuery" (click)="searchQuery = ''" class="clear-search">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2" />
+                            <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2" />
+                        </svg>
+                    </button>
+                </div>
+                <button (click)="onSearch(); closeSearch()" class="mobile-search-button"
+                    [disabled]="!searchQuery.trim()">
+                    Search
+                </button>
+            </div>
+            <div class="search-suggestions">
+                <p class="suggestions-title">Popular Searches</p>
+                <div class="suggestion-tags">
+                    <button class="suggestion-tag"
+                        (click)="searchQuery = 'Frontend Developer'; onSearch(); closeSearch()">Frontend
+                        Developer</button>
+                    <button class="suggestion-tag"
+                        (click)="searchQuery = 'Backend Developer'; onSearch(); closeSearch()">Backend
+                        Developer</button>
+                    <button class="suggestion-tag"
+                        (click)="searchQuery = 'UI/UX Designer'; onSearch(); closeSearch()">UI/UX Designer</button>
+                    <button class="suggestion-tag"
+                        (click)="searchQuery = 'Product Manager'; onSearch(); closeSearch()">Product Manager</button>
+                    <button class="suggestion-tag"
+                        (click)="searchQuery = 'Data Scientist'; onSearch(); closeSearch()">Data Scientist</button>
+                    <button class="suggestion-tag"
+                        (click)="searchQuery = 'DevOps Engineer'; onSearch(); closeSearch()">DevOps Engineer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Navigation -->
+    <nav class="mobile-nav" [class.open]="isMenuOpen">
+        <div class="mobile-nav-content">
+            <!-- Public Mobile Navigation (when not logged in) -->
+            <ng-container *ngIf="!isLoggedIn">
+                <a routerLink="/jobs" routerLinkActive="active" class="mobile-nav-link" (click)="toggleMenu()">Find
+                    Jobs</a>
+                <a routerLink="/about" routerLinkActive="active" class="mobile-nav-link"
+                    (click)="toggleMenu()">About</a>
+                <a routerLink="/contact" routerLinkActive="active" class="mobile-nav-link"
+                    (click)="toggleMenu()">Contact</a>
+            </ng-container>
+
+            <!-- Admin Mobile Navigation -->
+            <ng-container *ngIf="isLoggedIn && currentUser?.role === 'admin'">
+                <a routerLink="/admin/manage-users" routerLinkActive="active" class="mobile-nav-link"
+                    (click)="toggleMenu()">Manage Users</a>
+                <a routerLink="/admin/manage-jobs" routerLinkActive="active" class="mobile-nav-link"
+                    (click)="toggleMenu()">Manage Jobs</a>
+                <a routerLink="/admin/reports" routerLinkActive="active" class="mobile-nav-link"
+                    (click)="toggleMenu()">Reports</a>
+            </ng-container>
+
+            <!-- Company Mobile Navigation -->
+            <ng-container *ngIf="isLoggedIn && currentUser?.role === 'company'">
+                <a routerLink="/company/post-job" routerLinkActive="active" class="mobile-nav-link"
+                    (click)="toggleMenu()">Post Job</a>
+                <a routerLink="/company/my-jobs" routerLinkActive="active" class="mobile-nav-link"
+                    (click)="toggleMenu()">My Jobs</a>
+            </ng-container>
+
+            <!-- Job Seeker Mobile Navigation -->
+            <ng-container *ngIf="isLoggedIn && currentUser?.role === 'job-seeker'">
+                <a routerLink="/jobseeker/jobs" routerLinkActive="active" class="mobile-nav-link"
+                    (click)="toggleMenu()">Jobs</a>
+                <a routerLink="/jobseeker/applied" routerLinkActive="active" class="mobile-nav-link"
+                    (click)="toggleMenu()">Applied Jobs</a>
+                <a routerLink="/jobseeker/saved" routerLinkActive="active" class="mobile-nav-link"
+                    (click)="toggleMenu()">Saved Jobs</a>
+            </ng-container>
+
+            <div class="mobile-auth" *ngIf="!isLoggedIn">
+                <a routerLink="/login" (click)="toggleMenu()" class="mobile-login-btn">Sign In</a>
+                <a routerLink="/register" (click)="toggleMenu()" class="mobile-signup-btn">Sign Up</a>
+            </div>
+
+            <div class="mobile-user-menu" *ngIf="isLoggedIn">
+                <div class="mobile-user-info">
+                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face"
+                        [alt]="currentUser?.firstName + ' ' + currentUser?.lastName" class="mobile-avatar">
+                    <span class="mobile-user-name">{{ currentUser?.firstName }} {{ currentUser?.lastName }}</span>
+                </div>
+                <!-- Role-based Profile Links for Mobile -->
+                <a *ngIf="currentUser?.role === 'admin'" routerLink="/admin/profile" class="mobile-nav-link"
+                    (click)="toggleMenu()">Admin Profile</a>
+                <a *ngIf="currentUser?.role === 'company'" routerLink="/company/profile" class="mobile-nav-link"
+                    (click)="toggleMenu()">Company Profile</a>
+                <a *ngIf="currentUser?.role === 'job-seeker'" routerLink="/jobseeker/profile" class="mobile-nav-link"
+                    (click)="toggleMenu()">Profile</a>
+                <!-- Role-based Dashboard Links for Mobile -->
+                <a *ngIf="currentUser?.role === 'admin'" routerLink="/admin/dashboard" class="mobile-nav-link"
+                    (click)="toggleMenu()">Admin Dashboard</a>
+                <a *ngIf="currentUser?.role === 'company'" routerLink="/company/dashboard" class="mobile-nav-link"
+                    (click)="toggleMenu()">Company Dashboard</a>
+                <a *ngIf="currentUser?.role === 'job-seeker'" routerLink="/jobseeker/dashboard" class="mobile-nav-link"
+                    (click)="toggleMenu()">Dashboard</a>
+                <!-- Role-based Settings Links for Mobile -->
+                <a *ngIf="currentUser?.role === 'admin'" routerLink="/admin/settings" class="mobile-nav-link"
+                    (click)="toggleMenu()">Admin Settings</a>
+                <a *ngIf="currentUser?.role === 'company'" routerLink="/company/settings" class="mobile-nav-link"
+                    (click)="toggleMenu()">Company Settings</a>
+                <a *ngIf="currentUser?.role === 'job-seeker'" routerLink="/jobseeker/settings" class="mobile-nav-link"
+                    (click)="toggleMenu()">Settings</a>
+                <a (click)="onLogout(); toggleMenu()" class="mobile-nav-link logout">Sign Out</a>
+            </div>
+        </div>
+    </nav>
+</header>

@@ -1,0 +1,113 @@
+<div class="reports-page">
+  <div class="container">
+    <div class="header">
+      <h1>Reports & Analytics</h1>
+      <p>View platform statistics and generate reports</p>
+    </div>
+
+    <!-- Key Statistics -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <h3>Total Users</h3>
+        <div class="stat-value">{{ stats.totalUsers | number }}</div>
+        <div class="stat-change positive">+{{ stats.newUsersThisMonth }} this month</div>
+      </div>
+      <div class="stat-card">
+        <h3>Total Jobs</h3>
+        <div class="stat-value">{{ stats.totalJobs | number }}</div>
+        <div class="stat-change positive">+{{ stats.newJobsThisMonth }} this month</div>
+      </div>
+      <div class="stat-card">
+        <h3>Total Applications</h3>
+        <div class="stat-value">{{ stats.totalApplications | number }}</div>
+        <div class="stat-change neutral">All time</div>
+      </div>
+      <div class="stat-card">
+        <h3>Active Jobs</h3>
+        <div class="stat-value">{{ stats.activeJobs | number }}</div>
+        <div class="stat-change neutral">Currently open</div>
+      </div>
+    </div>
+
+    <div class="reports-grid">
+      <!-- User Growth Chart -->
+      <div class="report-section">
+        <div class="section-header">
+          <h2>User Growth</h2>
+          <button class="export-btn" (click)="exportReport('user-growth')">Export</button>
+        </div>
+        <div class="chart-container">
+          <div class="simple-chart">
+            <div class="chart-bars">
+              <div 
+                class="chart-bar" 
+                *ngFor="let data of userGrowth"
+                [style.height.%]="(data.users / 1250) * 100">
+                <div class="bar-value">{{ data.users }}</div>
+              </div>
+            </div>
+            <div class="chart-labels">
+              <div class="chart-label" *ngFor="let data of userGrowth">{{ data.month }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Job Categories -->
+      <div class="report-section">
+        <div class="section-header">
+          <h2>Job Categories</h2>
+          <button class="export-btn" (click)="exportReport('job-categories')">Export</button>
+        </div>
+        <div class="categories-list">
+          <div class="category-item" *ngFor="let category of jobCategories">
+            <div class="category-info">
+              <span class="category-name">{{ category.category }}</span>
+              <span class="category-count">{{ category.count }} jobs</span>
+            </div>
+            <div class="category-bar">
+              <div class="category-fill" [style.width.%]="category.percentage"></div>
+            </div>
+            <span class="category-percentage">{{ category.percentage }}%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Activity -->
+      <div class="report-section full-width">
+        <div class="section-header">
+          <h2>Recent Activity</h2>
+          <button class="export-btn" (click)="exportReport('activity-log')">Export</button>
+        </div>
+        <div class="activity-list">
+          <div class="activity-item" *ngFor="let activity of recentActivity">
+            <div class="activity-icon" [class]="'icon-' + activity.type"></div>
+            <div class="activity-content">
+              <div class="activity-message">{{ activity.message }}</div>
+              <div class="activity-time">{{ activity.time }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Export Options -->
+    <div class="export-section">
+      <h2>Export Reports</h2>
+      <div class="export-buttons">
+        <button class="export-option" (click)="exportReport('full-report')">
+          <span>Full Platform Report</span>
+          <small>Complete analytics and statistics</small>
+        </button>
+        <button class="export-option" (click)="exportReport('user-report')">
+          <span>User Report</span>
+          <small>User registration and activity data</small>
+        </button>
+        <button class="export-option" (click)="exportReport('job-report')">
+          <span>Job Report</span>
+          <small>Job postings and application data</small>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

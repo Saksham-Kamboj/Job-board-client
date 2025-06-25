@@ -1,0 +1,341 @@
+<!-- Hero Section -->
+<section class="hero-section">
+  <div class="hero-container">
+    <div class="hero-content">
+      <h1 class="hero-title">
+        <span class="typing-text">
+          <span class="static-text">Find Your </span>
+          <span class="text-primary typing-word">{{ currentTypingWord }}</span>
+          <span class="typing-cursor">|</span>
+          <span class="static-text"> Today</span>
+        </span>
+      </h1>
+      <p class="hero-subtitle">
+        Connect with top companies and discover opportunities that match your skills and aspirations.
+        Join thousands of professionals who found their perfect career match.
+      </p>
+
+      <!-- Search Form -->
+      <div class="search-container">
+        <form (ngSubmit)="onSearch()" class="search-form">
+          <div class="search-input-group">
+            <div class="search-field">
+              <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2" />
+                <path d="m21 21-4.35-4.35" stroke="currentColor" stroke-width="2" />
+              </svg>
+              <input type="text" [(ngModel)]="searchQuery" name="searchQuery"
+                placeholder="Job title, keywords, or company" class="search-input">
+            </div>
+            <div class="search-field">
+              <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" stroke="currentColor" stroke-width="2" />
+                <circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="2" />
+              </svg>
+              <input type="text" [(ngModel)]="searchLocation" name="searchLocation" placeholder="City, state, or remote"
+                class="search-input">
+            </div>
+            <button type="submit" class="search-button">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2" />
+                <path d="m21 21-4.35-4.35" stroke="currentColor" stroke-width="2" />
+              </svg>
+              Search Jobs
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Quick Stats -->
+      <div class="hero-stats">
+        <div class="stat-item">
+          <span class="stat-number">{{ stats.totalJobs }}+</span>
+          <span class="stat-label">Active Jobs</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">{{ stats.totalCompanies }}+</span>
+          <span class="stat-label">Companies</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">{{ stats.successfulPlacements }}+</span>
+          <span class="stat-label">Success Stories</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Job Categories Section -->
+<section class="categories-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Browse by Category</h2>
+      <p class="section-subtitle">Explore opportunities in your field of expertise</p>
+    </div>
+
+    <div class="categories-grid">
+      <div *ngFor="let category of jobCategories" class="category-card">
+        <div class="category-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path [attr.d]="category.icon" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+        </div>
+        <h3 class="category-name">{{ category.name }}</h3>
+        <p class="category-count">{{ category.count }} jobs available</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Featured Jobs Section -->
+<section class="featured-jobs-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Featured Jobs</h2>
+      <p class="section-subtitle">Hand-picked opportunities from top companies</p>
+    </div>
+
+    <div *ngIf="isLoading" class="loading-state">
+      <div class="loading-spinner"></div>
+      <p>Loading featured jobs...</p>
+    </div>
+
+    <div *ngIf="!isLoading" class="jobs-grid">
+      <div *ngFor="let job of featuredJobs" class="job-card">
+        <div class="job-header">
+          <div class="company-logo">
+            <span>{{ job.company.charAt(0) }}</span>
+          </div>
+          <div class="job-info">
+            <h3 class="job-title">
+              <a [routerLink]="['/jobs', job.id]">{{ job.title }}</a>
+            </h3>
+            <p class="job-company">{{ job.company }}</p>
+          </div>
+          <div *ngIf="job.featured" class="featured-badge">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <polygon
+                points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"
+                fill="currentColor" />
+            </svg>
+            Featured
+          </div>
+        </div>
+
+        <div class="job-details">
+          <div class="job-meta">
+            <span class="job-location">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" stroke="currentColor" stroke-width="2" />
+                <circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="2" />
+              </svg>
+              {{ job.location }}
+            </span>
+            <span class="job-type">{{ getJobTypeDisplay(job.type) }}</span>
+            <span class="job-posted">{{ getTimeAgo(job.postedDate) }}</span>
+          </div>
+
+          <div class="job-salary">{{ job.salary }}</div>
+
+          <div class="job-description">
+            <p>{{ job.description | slice:0:120 }}{{ job.description.length > 120 ? '...' : '' }}</p>
+          </div>
+
+          <div class="job-skills" *ngIf="job.skills && job.skills.length > 0">
+            <span *ngFor="let skill of job.skills.slice(0, 3)" class="skill-tag">{{ skill }}</span>
+            <span *ngIf="job.skills.length > 3" class="more-skills">+{{ job.skills.length - 3 }} more</span>
+          </div>
+        </div>
+
+        <div class="job-actions">
+          <button class="btn-apply" [routerLink]="['/jobs', job.id]">
+            View Details
+          </button>
+          <button class="btn-save">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="2" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-footer">
+      <a routerLink="/jobs" class="btn-secondary">View All Jobs</a>
+    </div>
+  </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="how-it-works-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">How It Works</h2>
+      <p class="section-subtitle">Get started in just three simple steps</p>
+    </div>
+
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <div class="step-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2" />
+            <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" />
+          </svg>
+        </div>
+        <h3 class="step-title">Create Your Profile</h3>
+        <p class="step-description">Sign up and build a compelling profile that showcases your skills and experience.
+        </p>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <div class="step-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2" />
+            <path d="m21 21-4.35-4.35" stroke="currentColor" stroke-width="2" />
+          </svg>
+        </div>
+        <h3 class="step-title">Search & Apply</h3>
+        <p class="step-description">Browse thousands of job opportunities and apply to positions that match your goals.
+        </p>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <div class="step-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" stroke="currentColor" stroke-width="2" />
+            <polyline points="22,4 12,14.01 9,11.01" stroke="currentColor" stroke-width="2" />
+          </svg>
+        </div>
+        <h3 class="step-title">Get Hired</h3>
+        <p class="step-description">Connect with employers, ace your interviews, and land your dream job.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="testimonials-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">What Our Users Say</h2>
+      <p class="section-subtitle">Success stories from job seekers and employers</p>
+    </div>
+
+    <div class="testimonials-grid">
+      <div *ngFor="let testimonial of testimonials" class="testimonial-card">
+        <div class="testimonial-content">
+          <div class="quote-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"
+                fill="currentColor" />
+              <path
+                d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"
+                fill="currentColor" />
+            </svg>
+          </div>
+          <p class="testimonial-text">{{ testimonial.content }}</p>
+        </div>
+        <div class="testimonial-author">
+          <div class="author-avatar">{{ testimonial.avatar }}</div>
+          <div class="author-info">
+            <h4 class="author-name">{{ testimonial.name }}</h4>
+            <p class="author-role">{{ testimonial.role }} at {{ testimonial.company }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Call to Action Section -->
+<section class="cta-section">
+  <div class="container">
+    <div class="cta-content">
+      <h2 class="cta-title">Ready to Take the Next Step?</h2>
+      <p class="cta-subtitle">
+        Join thousands of professionals who have found their dream jobs through our platform.
+        Start your journey today!
+      </p>
+      <div class="cta-buttons">
+        <a *ngIf="!isAuthenticated" routerLink="/auth/signup" class="btn-primary">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2" />
+            <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" />
+          </svg>
+          Get Started - It's Free
+        </a>
+        <a *ngIf="isAuthenticated" routerLink="/jobs" class="btn-primary">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2" />
+            <path d="m21 21-4.35-4.35" stroke="currentColor" stroke-width="2" />
+          </svg>
+          Browse Jobs
+        </a>
+        <a routerLink="/jobs" class="btn-secondary">
+          Explore Jobs
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Statistics Section -->
+<section class="stats-section">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2" stroke="currentColor" stroke-width="2" />
+            <line x1="8" y1="21" x2="16" y2="21" stroke="currentColor" stroke-width="2" />
+            <line x1="12" y1="17" x2="12" y2="21" stroke="currentColor" stroke-width="2" />
+          </svg>
+        </div>
+        <div class="stat-number">{{ stats.totalJobs }}+</div>
+        <div class="stat-label">Active Job Listings</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2" />
+            <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2" />
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87" stroke="currentColor" stroke-width="2" />
+            <path d="M16 3.13a4 4 0 0 1 0 7.75" stroke="currentColor" stroke-width="2" />
+          </svg>
+        </div>
+        <div class="stat-number">{{ stats.totalCompanies }}+</div>
+        <div class="stat-label">Trusted Companies</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" stroke="currentColor" stroke-width="2" />
+            <polyline points="22,4 12,14.01 9,11.01" stroke="currentColor" stroke-width="2" />
+          </svg>
+        </div>
+        <div class="stat-number">{{ stats.successfulPlacements }}+</div>
+        <div class="stat-label">Successful Placements</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+              fill="currentColor" />
+          </svg>
+        </div>
+        <div class="stat-number">4.8/5</div>
+        <div class="stat-label">User Satisfaction</div>
+      </div>
+    </div>
+  </div>
+</section>

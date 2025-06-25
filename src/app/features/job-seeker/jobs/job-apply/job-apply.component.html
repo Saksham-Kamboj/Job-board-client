@@ -1,0 +1,310 @@
+<div class="job-apply-container">
+  <!-- Header -->
+  <div class="apply-header">
+    <button (click)="goBack()" class="btn-secondary back-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M19 12H5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round" />
+      </svg>
+      Back to Job
+    </button>
+
+    <div class="apply-title">
+      <h1>Apply for Position</h1>
+      <p *ngIf="job" class="job-info">{{ job.title }} at {{ job.company }}</p>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-container">
+    <div class="loading-spinner"></div>
+    <p>Loading job details...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error && !isLoading" class="error-container">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
+      <line x1="15" y1="9" x2="9" y2="15" stroke="currentColor" stroke-width="2" />
+      <line x1="9" y1="9" x2="15" y2="15" stroke="currentColor" stroke-width="2" />
+    </svg>
+    <h3>Error</h3>
+    <p>{{ error }}</p>
+  </div>
+
+  <!-- Success State -->
+  <div *ngIf="success" class="success-container">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round" />
+      <polyline points="22,4 12,14.01 9,11.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round" />
+    </svg>
+    <h3>Application Submitted!</h3>
+    <p>{{ success }}</p>
+    <p class="redirect-info">Redirecting you back to the job page...</p>
+  </div>
+
+  <!-- Profile Check -->
+  <div *ngIf="!isLoading && !error && !success && !userProfile" class="profile-prompt">
+    <div class="prompt-card">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2" />
+        <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" />
+      </svg>
+      <h2>Complete Your Profile First</h2>
+      <p>To apply for jobs quickly and efficiently, please complete your profile with your professional information,
+        resume, and contact details.</p>
+      <div class="prompt-actions">
+        <button (click)="goToProfile()" class="btn-primary">
+          Complete Profile
+        </button>
+        <button (click)="continueWithoutProfile()" class="btn-secondary">
+          Continue Without Profile
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Application Form -->
+  <div *ngIf="!isLoading && !error && !success && (userProfile || showFullForm)" class="application-form">
+    <form [formGroup]="applicationForm" (ngSubmit)="onSubmit()">
+
+      <!-- Job Summary -->
+      <div *ngIf="job" class="job-summary">
+        <h2>Position Details</h2>
+        <div class="job-card">
+          <div class="job-header">
+            <h3>{{ job.title }}</h3>
+            <span class="company">{{ job.company }}</span>
+          </div>
+          <div class="job-meta">
+            <span class="location">{{ job.location }}</span>
+            <span class="type">{{ job.type }}</span>
+            <span class="salary" *ngIf="job.salary">{{ job.salary }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Profile Summary (if profile exists) -->
+      <div *ngIf="userProfile" class="profile-summary">
+        <h2>Your Information</h2>
+        <div class="profile-card">
+          <div class="profile-header">
+            <div class="profile-avatar">
+              {{ getProfileInitials() }}
+            </div>
+            <div class="profile-info">
+              <h3>{{ userProfile.personalInfo.firstName }} {{ userProfile.personalInfo.lastName }}</h3>
+              <p>{{ userProfile.professionalInfo.currentTitle }}</p>
+              <p>{{ userProfile.personalInfo.email }}</p>
+            </div>
+            <button type="button" (click)="editProfile()" class="btn-secondary edit-btn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="currentColor"
+                  stroke-width="2" />
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor"
+                  stroke-width="2" />
+              </svg>
+              Edit
+            </button>
+          </div>
+
+          <div class="profile-details">
+            <div class="detail-row">
+              <span class="label">Phone:</span>
+              <span class="value">{{ userProfile.personalInfo.phone }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Location:</span>
+              <span class="value">{{ userProfile.personalInfo.address.city }}, {{ userProfile.personalInfo.address.state
+                }}</span>
+            </div>
+            <div class="detail-row" *ngIf="userProfile.resume">
+              <span class="label">Resume:</span>
+              <span class="value">{{ userProfile.resume.fileName }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Personal Information -->
+      <div class="form-section">
+        <h2>Personal Information</h2>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="firstName">First Name *</label>
+            <input type="text" id="firstName" formControlName="firstName" class="form-input"
+              [class.error]="getFieldError('firstName')">
+            <span *ngIf="getFieldError('firstName')" class="error-message">{{ getFieldError('firstName') }}</span>
+          </div>
+
+          <div class="form-group">
+            <label for="lastName">Last Name *</label>
+            <input type="text" id="lastName" formControlName="lastName" class="form-input"
+              [class.error]="getFieldError('lastName')">
+            <span *ngIf="getFieldError('lastName')" class="error-message">{{ getFieldError('lastName') }}</span>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email Address *</label>
+            <input type="email" id="email" formControlName="email" class="form-input"
+              [class.error]="getFieldError('email')">
+            <span *ngIf="getFieldError('email')" class="error-message">{{ getFieldError('email') }}</span>
+          </div>
+
+          <div class="form-group">
+            <label for="phone">Phone Number *</label>
+            <input type="tel" id="phone" formControlName="phone" class="form-input" placeholder="+1 (555) 123-4567"
+              [class.error]="getFieldError('phone')">
+            <span *ngIf="getFieldError('phone')" class="error-message">{{ getFieldError('phone') }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Address Information -->
+      <div class="form-section">
+        <h2>Address</h2>
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label for="street">Street Address *</label>
+            <input type="text" id="street" formControlName="street" class="form-input"
+              [class.error]="getFieldError('street')">
+            <span *ngIf="getFieldError('street')" class="error-message">{{ getFieldError('street') }}</span>
+          </div>
+
+          <div class="form-group">
+            <label for="city">City *</label>
+            <input type="text" id="city" formControlName="city" class="form-input"
+              [class.error]="getFieldError('city')">
+            <span *ngIf="getFieldError('city')" class="error-message">{{ getFieldError('city') }}</span>
+          </div>
+
+          <div class="form-group">
+            <label for="state">State *</label>
+            <input type="text" id="state" formControlName="state" class="form-input"
+              [class.error]="getFieldError('state')">
+            <span *ngIf="getFieldError('state')" class="error-message">{{ getFieldError('state') }}</span>
+          </div>
+
+          <div class="form-group">
+            <label for="zipCode">ZIP Code *</label>
+            <input type="text" id="zipCode" formControlName="zipCode" class="form-input"
+              [class.error]="getFieldError('zipCode')">
+            <span *ngIf="getFieldError('zipCode')" class="error-message">{{ getFieldError('zipCode') }}</span>
+          </div>
+
+          <div class="form-group">
+            <label for="country">Country *</label>
+            <select id="country" formControlName="country" class="form-input" [class.error]="getFieldError('country')">
+              <option value="United States">United States</option>
+              <option value="Canada">Canada</option>
+              <option value="United Kingdom">United Kingdom</option>
+              <option value="Australia">Australia</option>
+              <option value="Germany">Germany</option>
+              <option value="France">France</option>
+              <option value="Other">Other</option>
+            </select>
+            <span *ngIf="getFieldError('country')" class="error-message">{{ getFieldError('country') }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Professional Links -->
+      <div class="form-section">
+        <h2>Professional Links (Optional)</h2>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="linkedinUrl">LinkedIn Profile</label>
+            <input type="url" id="linkedinUrl" formControlName="linkedinUrl" class="form-input"
+              placeholder="https://linkedin.com/in/yourprofile">
+          </div>
+
+          <div class="form-group">
+            <label for="portfolioUrl">Portfolio Website</label>
+            <input type="url" id="portfolioUrl" formControlName="portfolioUrl" class="form-input"
+              placeholder="https://yourportfolio.com">
+          </div>
+
+          <div class="form-group">
+            <label for="githubUrl">GitHub Profile</label>
+            <input type="url" id="githubUrl" formControlName="githubUrl" class="form-input"
+              placeholder="https://github.com/yourusername">
+          </div>
+        </div>
+      </div>
+
+      <!-- Resume Upload -->
+      <div class="form-section">
+        <h2>Resume *</h2>
+        <div class="resume-section">
+          <div *ngIf="resumePreview && !selectedResume" class="current-resume">
+            <div class="resume-info">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="currentColor"
+                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                <polyline points="14,2 14,8 20,8" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
+              <div class="resume-details">
+                <span class="resume-name">{{ resumePreview.fileName }}</span>
+                <span class="resume-size">{{ (resumePreview.fileSize / 1024 / 1024).toFixed(2) }} MB</span>
+              </div>
+            </div>
+            <p class="resume-note">Using your saved resume. Upload a new one to replace it.</p>
+          </div>
+
+          <div class="file-upload">
+            <input type="file" id="resume" (change)="onResumeSelected($event)" accept=".pdf,.doc,.docx"
+              class="file-input">
+            <label for="resume" class="file-label">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round" />
+                <polyline points="7,10 12,15 17,10" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" />
+                <line x1="12" y1="15" x2="12" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
+              {{ selectedResume ? selectedResume.name : 'Choose Resume File' }}
+            </label>
+          </div>
+
+          <div *ngIf="selectedResume" class="selected-file">
+            <span class="file-name">{{ selectedResume.name }}</span>
+            <span class="file-size">{{ (selectedResume.size / 1024 / 1024).toFixed(2) }} MB</span>
+          </div>
+
+          <p class="file-note">Accepted formats: PDF, DOC, DOCX (Max 5MB)</p>
+        </div>
+      </div>
+
+      <!-- Cover Letter -->
+      <div class="form-section">
+        <h2>Cover Letter *</h2>
+        <div class="form-group">
+          <label for="coverLetter">Why are you interested in this position?</label>
+          <textarea id="coverLetter" formControlName="coverLetter" class="form-textarea" rows="6"
+            placeholder="Tell us why you're the perfect fit for this role..."
+            [class.error]="getFieldError('coverLetter')"></textarea>
+          <span *ngIf="getFieldError('coverLetter')" class="error-message">{{ getFieldError('coverLetter') }}</span>
+          <div class="character-count">
+            {{ applicationForm.get('coverLetter')?.value?.length || 0 }} characters (minimum 100)
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="form-actions">
+        <button type="button" (click)="goBack()" class="btn-secondary" [disabled]="isSubmitting">
+          Cancel
+        </button>
+        <button type="submit" class="btn-primary" [disabled]="isSubmitting || applicationForm.invalid">
+          <span *ngIf="isSubmitting" class="loading-spinner small"></span>
+          {{ isSubmitting ? 'Submitting...' : 'Submit Application' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

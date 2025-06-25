@@ -1,0 +1,49 @@
+<div class="my-jobs-page">
+  <div class="container">
+    <div class="header">
+      <h1>My Jobs</h1>
+      <p>Manage your posted job listings</p>
+      <a routerLink="/company/post-job" class="post-job-btn">Post New Job</a>
+    </div>
+
+    <div class="jobs-list" *ngIf="myJobs.length > 0; else noJobs">
+      <div class="job-card" *ngFor="let job of myJobs">
+        <div class="job-info">
+          <h3>{{ job.title }}</h3>
+          <p class="location">{{ job.location }}</p>
+          <p class="salary">{{ job.salary }}</p>
+          <p class="posted-date">Posted on: {{ job.postedDate | date }}</p>
+          <div class="job-stats">
+            <span class="applicants">{{ job.applicants }} applicants</span>
+            <span class="status" [class]="'status-' + job.status.toLowerCase()">
+              {{ job.status }}
+            </span>
+          </div>
+        </div>
+        <div class="job-actions">
+          <button class="view-btn" [routerLink]="['/company/applicants', job.id]">
+            View Applicants
+          </button>
+          <button class="edit-btn" [routerLink]="['/jobs', job.id, 'edit']">
+            Edit
+          </button>
+          <button 
+            class="toggle-btn" 
+            (click)="toggleJobStatus(job.id)"
+            [class.close-btn]="job.status === 'Active'"
+            [class.reopen-btn]="job.status === 'Closed'">
+            {{ job.status === 'Active' ? 'Close' : 'Reopen' }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #noJobs>
+      <div class="no-jobs">
+        <h2>No Jobs Posted</h2>
+        <p>You haven't posted any jobs yet. Start by posting your first job!</p>
+        <a routerLink="/company/post-job" class="post-job-btn">Post Your First Job</a>
+      </div>
+    </ng-template>
+  </div>
+</div>
