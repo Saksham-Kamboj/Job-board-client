@@ -1,14 +1,18 @@
 # JobBoard
 
-![image](https://github.com/user-attachments/assets/27ee77af-820c-4ed5-b4d3-a7db35e4368e)
+![image](https://github.com/user-attachments/assets/06049586-34b3-404a-8162-6279fb195012)
 
-![image](https://github.com/user-attachments/assets/a04053dc-ad33-475a-bf71-1dea475c33af)
+![image](https://github.com/user-attachments/assets/6b2bce13-248e-45d6-bd39-e1d18938b8e7)
 
-![image](https://github.com/user-attachments/assets/2ece1815-4e4e-46d5-bb83-707f379f3635)
+![image](https://github.com/user-attachments/assets/e2692c4a-1b6a-4dab-871a-5199a8a3236e)
 
-![image](https://github.com/user-attachments/assets/9b82ef4f-b3e1-42ae-aa18-dbf8e8b783ee)
+![image](https://github.com/user-attachments/assets/2a98a1bf-c3f4-4324-9b9e-a025f751747f)
 
+![image](https://github.com/user-attachments/assets/eb6106e1-b31f-4736-af54-9e6b86694f67)
 
+![image](https://github.com/user-attachments/assets/86e246ca-f1f1-4965-ba7c-be8efb5af1a9)
+
+![image](https://github.com/user-attachments/assets/d2869ede-6d48-48cc-8c9e-68b0ba4cd3ce)
 
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.14.
